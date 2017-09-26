@@ -1,4 +1,4 @@
-package com.kameecoding.filebot;
+package com.kameecoding.ffmpeg;
 
 /**
  * Created by Andrej Kovac (kameecoding) <andrej.kovac.ggc@gmail.com> on 2017-08-20.

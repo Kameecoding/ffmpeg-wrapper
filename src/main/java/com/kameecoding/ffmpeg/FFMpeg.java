@@ -1,4 +1,4 @@
-package com.kameecoding.filebot;
+package com.kameecoding.ffmpeg;
 
 import java.util.List;
 
