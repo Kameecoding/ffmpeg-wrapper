@@ -27,6 +27,16 @@ public class FFProbeTest {
 					this.getClass().getResourceAsStream("probe_output1.txt"),
 					"UTF-8"
 			);
+
+			output2 = IOUtils.toString(
+					this.getClass().getResourceAsStream("probe_output2.txt"),
+					"UTF-8"
+			);
+
+			output3 = IOUtils.toString(
+					this.getClass().getResourceAsStream("probe_output3.txt"),
+					"UTF-8"
+			);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -46,5 +56,51 @@ public class FFProbeTest {
 		assertEquals("5.1", firstAudio.getChannels());
 		assertEquals("0:1", firstAudio.getStreamMapping());
 		assertEquals("hun", firstAudio.getLanguage().getAlpha3());
+
+		AudioStream secondAudio = probeResult.getAudios().get(1);
+		assertEquals(1536, secondAudio.getBitRate());
+		assertEquals("dts", secondAudio.getCodec().getName());
+		assertEquals("5.1", secondAudio.getChannels());
+		assertEquals("0:2", secondAudio.getStreamMapping());
+		assertEquals("eng", secondAudio.getLanguage().getAlpha3());
+	}
+
+	@Test
+	public void standardTestOutput2() {
+		FFProbe probe = new FFProbe();
+
+		FFProbeResult probeResult = probe.parseProbe(output1);
+
+		assertEquals(2, probeResult.getAudios().size());
+
+		AudioStream firstAudio = probeResult.getAudios().get(0);
+		assertEquals(448, firstAudio.getBitRate());
+		assertEquals("dts", firstAudio.getCodec().getName());
+		assertEquals("5.1", firstAudio.getChannels());
+		assertEquals("0:1", firstAudio.getStreamMapping());
+		assertEquals("eng", firstAudio.getLanguage().getAlpha3());
+
+		AudioStream secondAudio = probeResult.getAudios().get(1);
+		assertEquals(448, secondAudio.getBitRate());
+		assertEquals("ac3", secondAudio.getCodec().getName());
+		assertEquals("5.1", secondAudio.getChannels());
+		assertEquals("0:2", secondAudio.getStreamMapping());
+		assertEquals("hun", secondAudio.getLanguage().getAlpha3());
+	}
+
+	@Test
+	public void standardTestOutput3() {
+		FFProbe probe = new FFProbe();
+
+		FFProbeResult probeResult = probe.parseProbe(output1);
+
+		assertEquals(1, probeResult.getAudios().size());
+
+		AudioStream firstAudio = probeResult.getAudios().get(0);
+		assertEquals(448, firstAudio.getBitRate());
+		assertEquals("aac", firstAudio.getCodec().getName());
+		assertEquals("stereo", firstAudio.getChannels());
+		assertEquals("0:1", firstAudio.getStreamMapping());
+		assertEquals("jpn", firstAudio.getLanguage().getAlpha3());
 	}
 }
