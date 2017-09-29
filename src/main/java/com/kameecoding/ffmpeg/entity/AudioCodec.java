@@ -10,6 +10,7 @@ public enum AudioCodec {
         EAC3("eac3"),
         MP3("mp3"),
         WMA("wma"),
+        DTS("dts"),
         UNKOWN("unkown");
 
 
@@ -19,6 +20,10 @@ public enum AudioCodec {
                 this.name = name;
         }
 
+        public static AudioCodec getByNameIgnoreCase(String name) {
+                return getByName(name.toLowerCase());
+        }
+
         public static AudioCodec getByName(String name) {
             for (AudioCodec codec : AudioCodec.values()) {
             	if (codec.name.equals(name)) {
@@ -26,7 +31,7 @@ public enum AudioCodec {
 	            }
             }
 
-            return null;
+            return UNKOWN;
         }
 
         public String getName() {

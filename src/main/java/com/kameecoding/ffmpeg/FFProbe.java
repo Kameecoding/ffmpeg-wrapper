@@ -1,14 +1,13 @@
 package com.kameecoding.ffmpeg;
 
 import com.kameecoding.ffmpeg.entity.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 /**
@@ -18,18 +17,12 @@ public class FFProbe implements Runnable {
 
     private ProcessBuilder processBuilder;
     private Process process;
-    private Pattern subtitlePattern =
-		    Pattern.compile("Stream #([0-9]:[0-9]+)\\(([a-z]{3,7})\\):[\\W]*(?:sub|subtitle).*?metadata:([\\s]" +
-				    "*?title[\\s]*?:[\\s]*?forced)?", Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
-    private Pattern audioPattern =
-		    Pattern.compile("Stream #([0-9]:[0-9]+)\\(([a-z]{3,7})\\):[\\s]*?audio:[\\s]*?([a-z0-9]{3})(?:.*?)?,[\\s]*?[0-9]{4,6}[\\s]*?[a-z]*?" +
-				    ",[\\s]*?([0-9\\.]{3}).*?([0-9]{3,4})[\\s]*?kb/s[\\s]*?(\\(default\\))?",
-		            Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
 
     private boolean success;
     private boolean finished;
     private BufferedReader stdInput;
     private BufferedReader stdError;
+
 
     FFProbe() {
 
@@ -42,6 +35,7 @@ public class FFProbe implements Runnable {
     @Override
     public void run() {
         try {
+
             process = processBuilder.start();
 
             stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -66,30 +60,44 @@ public class FFProbe implements Runnable {
 
 	FFProbeResult parseProbe(String s) {
     	FFProbeResult result = new FFProbeResult();
-		Matcher m;
-		m = audioPattern.matcher(s);
+        JSONObject jsonObject = new JSONObject(s);
+        JSONArray array = jsonObject.getJSONArray("streams");
+        for (int i = 0; i < array.length(); ++i) {
+            JSONObject currentObject = array.getJSONObject(i);
 
-		String mapping;
-		int bitRate;
-		AudioLocale code;
-		AudioCodec codec;
-		String channels;
-		Locale loc = new Locale("eng");
-		while (m.find()) {
-			mapping = m.group(1);
-			code = AudioLocale.getByCodeIgnoreCase(m.group(2));
-			codec = AudioCodec.getByName(m.group(3));
-			channels = m.group(4);
-			bitRate = Integer.parseInt(m.group(5));
-			result.getAudios().add(AudioStream.newInstance(code, mapping, codec, bitRate, channels));
-		}
+            if (currentObject.getString("codec_type").equals("audio")) {
+                AudioStream.AudioStreamFactory audioStreamFactory = new AudioStream.AudioStreamFactory();
+                AudioCodec codec = AudioCodec.getByNameIgnoreCase(currentObject.getString("codec_name"));
+                audioStreamFactory.codec(codec);
+                JSONObject tags = currentObject.getJSONObject("tags");
+                audioStreamFactory.language(AudioLocale.getByCodeIgnoreCase(tags.getString("language")));
+	            if (JSONUtils.hasObject(currentObject, "bit_rate")) {
+		            audioStreamFactory.bitrate(currentObject.getString("bit_rate"));
+	            } else if (JSONUtils.hasObject(tags, "BPS")) {
+		            audioStreamFactory.bitrate(tags.getString("BPS"));
+	            }
+                audioStreamFactory.channels(currentObject.getInt("channels"));
+                audioStreamFactory.mapping("0:" + String.valueOf(currentObject.getInt("index")));
+                result.getAudios().add(audioStreamFactory.build());
+            }
 
-		m = subtitlePattern.matcher(s);
+            if (currentObject.getString("codec_type").equals("subtitle")) {
+                String mapping = "0:" + String.valueOf(currentObject.getInt("index"));
+                JSONObject tags = currentObject.getJSONObject("tags");
+                String title = null;
 
-		while (m.find()) {
-			result.getSubtitles().add(SubtitleStream.newInstance(m.group(1), AudioLocale.getByCode(m.group(2)), m.group(3) != null));
-		    success = true;
-		}
+				if (JSONUtils.hasObject(tags, "title")) {
+					title = tags.getString("title").toLowerCase();
+				}
+
+                AudioLocale language = AudioLocale.getByCodeIgnoreCase(tags.getString("language"));
+                boolean isForced = false;
+                JSONObject disposition = currentObject.getJSONObject("disposition");
+                int forced = disposition.getInt("forced");
+                isForced = forced == 1 || ("forced".equals(title));
+                result.getSubtitles().add(SubtitleStream.newInstance(mapping, language, isForced));
+            }
+        }
 
 		return result;
 	}

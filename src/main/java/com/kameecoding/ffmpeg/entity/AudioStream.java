@@ -8,23 +8,49 @@ public class AudioStream {
 	private AudioLocale language;
     private String streamMapping;
     private AudioCodec codec;
-    private int bitRate;
-	private String channels;
+    private String bitRate;
+	private int channels;
 
     private AudioStream() {
 
     }
 
-    public static AudioStream newInstance(AudioLocale language, String streamMapping, AudioCodec codec, int bitRate, String channels) {
-        AudioStream audio = new AudioStream();
-	    audio.language = language;
-	    audio.streamMapping = streamMapping;
-	    audio.codec = codec;
-	    audio.bitRate = bitRate;
-	    audio.channels = channels;
+	public static class AudioStreamFactory {
+    	private AudioStream audioStream;
 
-        return audio;
-    }
+    	public AudioStreamFactory() {
+		    audioStream = new AudioStream();
+	    }
+
+	    public AudioStreamFactory language(AudioLocale language) {
+		    audioStream.language = language;
+    		return this;
+	    }
+
+	    public AudioStreamFactory mapping(String streamMapping) {
+		    audioStream.streamMapping = streamMapping;
+    		return this;
+	    }
+
+	    public AudioStreamFactory codec(AudioCodec codec) {
+		    audioStream.codec = codec;
+		    return this;
+	    }
+
+	    public AudioStreamFactory channels(int channels) {
+	        audioStream.channels = channels;
+    		return this;
+	    }
+
+	    public AudioStreamFactory bitrate(String bitrate) {
+	        audioStream.bitRate = bitrate;
+			return this;
+	    }
+
+	    public AudioStream build() {
+    		return audioStream;
+	    }
+	}
 
 	public AudioLocale getLanguage() {
 		return language;
@@ -38,11 +64,11 @@ public class AudioStream {
 		return codec;
 	}
 
-	public int getBitRate() {
+	public String getBitRate() {
 		return bitRate;
 	}
 
-	public String getChannels() {
+	public int getChannels() {
 		return channels;
 	}
 }
