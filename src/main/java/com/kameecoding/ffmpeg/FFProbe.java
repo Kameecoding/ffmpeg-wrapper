@@ -65,6 +65,19 @@ public class FFProbe implements Runnable {
         for (int i = 0; i < array.length(); ++i) {
             JSONObject currentObject = array.getJSONObject(i);
 
+            if (currentObject.getString("codec_type").equals("video")) {
+	            VideoStream.VideoStreamFactory videoStreamFactory = new VideoStream.VideoStreamFactory();
+	            videoStreamFactory.heigh(currentObject.getInt("height"));
+	            videoStreamFactory.width(currentObject.getInt("width"));
+	            JSONObject tags = currentObject.getJSONObject("tags");
+	            if (JSONUtils.hasObject(currentObject, "bit_rate")) {
+		            videoStreamFactory.bitrate(currentObject.getString("bit_rate"));
+	            } else if (JSONUtils.hasObject(tags, "BPS")) {
+		            videoStreamFactory.bitrate(tags.getString("BPS"));
+	            }
+	            result.getVideos().add(videoStreamFactory.build());
+            }
+
             if (currentObject.getString("codec_type").equals("audio")) {
                 AudioStream.AudioStreamFactory audioStreamFactory = new AudioStream.AudioStreamFactory();
                 AudioCodec codec = AudioCodec.getByNameIgnoreCase(currentObject.getString("codec_name"));

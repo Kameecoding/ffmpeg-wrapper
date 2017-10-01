@@ -1,5 +1,6 @@
 package com.kameecoding.ffmpeg.entity;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,8 @@ public class FFProbeResult {
 
 	private final List<SubtitleStream> subtitles = new ArrayList<>();
 	private final List<AudioStream> audios = new ArrayList<>();
+	private final List<VideoStream> videos = new ArrayList<>();
+	private Duration duration;
 
 	public List<SubtitleStream> getSubtitles() {
 		return subtitles;
@@ -17,5 +20,17 @@ public class FFProbeResult {
 
 	public List<AudioStream> getAudios() {
 		return audios;
+	}
+
+	public Duration getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Duration duration) {
+		this.duration = duration;
+	}
+
+	public List<VideoStream> getVideos() {
+		return videos;
 	}
 }

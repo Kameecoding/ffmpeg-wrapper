@@ -6,7 +6,7 @@ package com.kameecoding.ffmpeg.entity;
 public class SubtitleStream {
 
     private AudioLocale language;
-    private String mappingCoordinates;
+    private String streamMapping;
 
     private boolean forced;
 
@@ -14,17 +14,25 @@ public class SubtitleStream {
 
     }
 
-    public static SubtitleStream newInstance(String mappingCoordinates, AudioLocale language, boolean forced) {
+    public static SubtitleStream newInstance(String streamMapping, AudioLocale language, boolean forced) {
         SubtitleStream subtitleStream = new SubtitleStream();
 
-        subtitleStream.mappingCoordinates = mappingCoordinates;
+        subtitleStream.streamMapping = streamMapping;
         subtitleStream.language = language;
         subtitleStream.forced = forced;
 
         return subtitleStream;
     }
 
-    public boolean isForced() {
+	public AudioLocale getLanguage() {
+		return language;
+	}
+
+	public String getStreamMapping() {
+		return streamMapping;
+	}
+
+	public boolean isForced() {
         return forced;
     }
 }

@@ -2,15 +2,17 @@ package com.kameecoding.ffmpeg;
 
 import com.kameecoding.ffmpeg.entity.AudioStream;
 import com.kameecoding.ffmpeg.entity.FFProbeResult;
+import com.kameecoding.ffmpeg.entity.SubtitleStream;
+import com.kameecoding.ffmpeg.entity.VideoStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.*;
-
-import java.io.IOException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Andrej Kovac (kameecoding) <andrej.kovac.ggc@gmail.com> on 2017-09-24.
@@ -51,6 +53,12 @@ public class FFProbeTest {
 
 		FFProbeResult probeResult = probe.parseProbe(output1);
 
+		assertEquals(1, probeResult.getVideos().size());
+		VideoStream videoStream = probeResult.getVideos().get(0);
+		assertEquals(1920, videoStream.getWidth());
+		assertEquals(804, videoStream.getHeight());
+		assertEquals("12191830", videoStream.getBitrate());
+
 		assertEquals(2, probeResult.getAudios().size());
 
 		AudioStream firstAudio = probeResult.getAudios().get(0);
@@ -66,6 +74,23 @@ public class FFProbeTest {
 		assertEquals(6, secondAudio.getChannels());
 		assertEquals("0:2", secondAudio.getStreamMapping());
 		assertEquals("eng", secondAudio.getLanguage().getAlpha3());
+
+		assertEquals(3, probeResult.getSubtitles().size());
+
+		SubtitleStream firstSub = probeResult.getSubtitles().get(0);
+		assertEquals("0:3", firstSub.getStreamMapping());
+		assertEquals("hun", firstSub.getLanguage().getAlpha3());
+		assertTrue(firstSub.isForced());
+
+		SubtitleStream secondSub = probeResult.getSubtitles().get(1);
+		assertEquals("0:4", secondSub.getStreamMapping());
+		assertEquals("hun", secondSub.getLanguage().getAlpha3());
+		assertFalse(secondSub.isForced());
+
+		SubtitleStream thirdSub = probeResult.getSubtitles().get(2);
+		assertEquals("0:5", thirdSub.getStreamMapping());
+		assertEquals("eng", thirdSub.getLanguage().getAlpha3());
+		assertFalse(thirdSub.isForced());
 	}
 
 	@Test
@@ -74,8 +99,13 @@ public class FFProbeTest {
 
 		FFProbeResult probeResult = probe.parseProbe(output2);
 
-		assertEquals(2, probeResult.getAudios().size());
+		assertEquals(1, probeResult.getVideos().size());
+		VideoStream videoStream = probeResult.getVideos().get(0);
+		assertEquals(3840, videoStream.getWidth());
+		assertEquals(1606, videoStream.getHeight());
+		assertEquals("61000888", videoStream.getBitrate());
 
+		assertEquals(2, probeResult.getAudios().size());
 		AudioStream firstAudio = probeResult.getAudios().get(0);
 		assertEquals("3650025", firstAudio.getBitRate());
 		assertEquals("dts", firstAudio.getCodec().getName());
@@ -89,6 +119,23 @@ public class FFProbeTest {
 		assertEquals(6, secondAudio.getChannels());
 		assertEquals("0:2", secondAudio.getStreamMapping());
 		assertEquals("hun", secondAudio.getLanguage().getAlpha3());
+
+		assertEquals(3, probeResult.getSubtitles().size());
+
+		SubtitleStream firstSub = probeResult.getSubtitles().get(0);
+		assertEquals("0:3", firstSub.getStreamMapping());
+		assertEquals("hun", firstSub.getLanguage().getAlpha3());
+		assertFalse(firstSub.isForced());
+
+		SubtitleStream secondSub = probeResult.getSubtitles().get(1);
+		assertEquals("0:4", secondSub.getStreamMapping());
+		assertEquals("hun", secondSub.getLanguage().getAlpha3());
+		assertTrue(secondSub.isForced());
+
+		SubtitleStream thirdSub = probeResult.getSubtitles().get(2);
+		assertEquals("0:5", thirdSub.getStreamMapping());
+		assertEquals("eng", thirdSub.getLanguage().getAlpha3());
+		assertFalse(thirdSub.isForced());
 	}
 
 
