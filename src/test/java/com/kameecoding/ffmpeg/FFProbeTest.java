@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -52,6 +54,8 @@ public class FFProbeTest {
 		FFProbe probe = new FFProbe();
 
 		FFProbeResult probeResult = probe.parseProbe(output1);
+
+		assertEquals(probeResult.getDuration(), Duration.ofSeconds(6647L));
 
 		assertEquals(1, probeResult.getVideos().size());
 		VideoStream videoStream = probeResult.getVideos().get(0);
@@ -98,6 +102,7 @@ public class FFProbeTest {
 		FFProbe probe = new FFProbe();
 
 		FFProbeResult probeResult = probe.parseProbe(output2);
+		assertEquals(probeResult.getDuration(), Duration.ofSeconds(7134L));
 
 		assertEquals(1, probeResult.getVideos().size());
 		VideoStream videoStream = probeResult.getVideos().get(0);

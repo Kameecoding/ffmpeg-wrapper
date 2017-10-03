@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.Duration;
 import java.util.List;
 
 
@@ -111,6 +112,13 @@ public class FFProbe implements Runnable {
                 result.getSubtitles().add(SubtitleStream.newInstance(mapping, language, isForced));
             }
         }
+
+        JSONObject format = jsonObject.getJSONObject("format");
+
+		String duration = format.getString("duration");
+		Double dDuration = Double.valueOf(duration);
+
+		result.setDuration(Duration.ofSeconds(dDuration.longValue()));
 
 		return result;
 	}
