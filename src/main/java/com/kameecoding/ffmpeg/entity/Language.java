@@ -3,7 +3,7 @@ package com.kameecoding.ffmpeg.entity;
 /**
  * Created by Andrej Kovac (kameecoding) <andrej.kovac.ggc@gmail.com> on 2017-09-24.
  */
-public enum AudioLocale {
+public enum Language {
 	ENG("eng","en"),
 	HUN("hun","hu"),
 	UNKNOWN("unk","un");
@@ -11,12 +11,12 @@ public enum AudioLocale {
 	private final String alpha3;
 	private final String alpha2;
 
-	AudioLocale(String code3, String code2){
+	Language(String code3, String code2){
 		this.alpha3 = code3;
 		this.alpha2 = code2;
 	}
 
-	public static AudioLocale getByCode(String locale) {
+	public static Language getByCode(String locale) {
 		if (locale.length() == 3) {
 			return getByCode3(locale);
 		} else if (locale.length() == 2) {
@@ -26,8 +26,8 @@ public enum AudioLocale {
 		}
 	}
 
-	private static AudioLocale getByCode2(String code) {
-		for (AudioLocale locale : AudioLocale.values()) {
+	private static Language getByCode2(String code) {
+		for (Language locale : Language.values()) {
 			if (locale.alpha2.equals(code)) {
 				return locale;
 			}
@@ -36,8 +36,8 @@ public enum AudioLocale {
 		return UNKNOWN;
 	}
 
-	private static AudioLocale getByCode3(String code) {
-		for (AudioLocale locale : AudioLocale.values()) {
+	private static Language getByCode3(String code) {
+		for (Language locale : Language.values()) {
 			if (locale.alpha3.equals(code)) {
 				return locale;
 			}
@@ -46,7 +46,7 @@ public enum AudioLocale {
 		return UNKNOWN;
 	}
 
-	public static AudioLocale getByCodeIgnoreCase(String group) {
+	public static Language getByCodeIgnoreCase(String group) {
 		String lowerCase = group.toLowerCase();
 		return getByCode(lowerCase);
 	}

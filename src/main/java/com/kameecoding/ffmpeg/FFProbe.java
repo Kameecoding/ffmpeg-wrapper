@@ -29,7 +29,7 @@ public class FFProbe implements Runnable {
 
     }
 
-    public static FFProbe newInstance(String executable, List<String> args) {
+    public static FFProbe newInstance(String executable, String... args) {
         return new FFProbe();
     }
 
@@ -84,7 +84,7 @@ public class FFProbe implements Runnable {
                 AudioCodec codec = AudioCodec.getByNameIgnoreCase(currentObject.getString("codec_name"));
                 audioStreamFactory.codec(codec);
                 JSONObject tags = currentObject.getJSONObject("tags");
-                audioStreamFactory.language(AudioLocale.getByCodeIgnoreCase(tags.getString("language")));
+                audioStreamFactory.language(Language.getByCodeIgnoreCase(tags.getString("language")));
 	            if (JSONUtils.hasObject(currentObject, "bit_rate")) {
 		            audioStreamFactory.bitrate(currentObject.getString("bit_rate"));
 	            } else if (JSONUtils.hasObject(tags, "BPS")) {
@@ -104,7 +104,7 @@ public class FFProbe implements Runnable {
 					title = tags.getString("title").toLowerCase();
 				}
 
-                AudioLocale language = AudioLocale.getByCodeIgnoreCase(tags.getString("language"));
+                Language language = Language.getByCodeIgnoreCase(tags.getString("language"));
                 boolean isForced = false;
                 JSONObject disposition = currentObject.getJSONObject("disposition");
                 int forced = disposition.getInt("forced");

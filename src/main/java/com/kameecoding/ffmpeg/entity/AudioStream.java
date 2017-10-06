@@ -5,7 +5,7 @@ package com.kameecoding.ffmpeg.entity;
  */
 public class AudioStream {
 
-	private AudioLocale language;
+	private Language language;
     private String streamMapping;
     private AudioCodec codec;
     private String bitRate;
@@ -22,7 +22,7 @@ public class AudioStream {
 		    audioStream = new AudioStream();
 	    }
 
-	    public AudioStreamFactory language(AudioLocale language) {
+	    public AudioStreamFactory language(Language language) {
 		    audioStream.language = language;
     		return this;
 	    }
@@ -52,7 +52,7 @@ public class AudioStream {
 	    }
 	}
 
-	public AudioLocale getLanguage() {
+	public Language getLanguage() {
 		return language;
 	}
 
