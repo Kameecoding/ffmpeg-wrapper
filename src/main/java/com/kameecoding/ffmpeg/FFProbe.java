@@ -23,6 +23,7 @@ public class FFProbe implements Runnable {
     private boolean finished;
     private BufferedReader stdInput;
     private BufferedReader stdError;
+    private FFProbeResult result;
 
 
     FFProbe() {
@@ -52,7 +53,7 @@ public class FFProbe implements Runnable {
             }
 
             s = sb.toString();
-	        parseProbe(s);
+	        result = parseProbe(s);
             finished = true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -120,6 +121,10 @@ public class FFProbe implements Runnable {
 
 		result.setDuration(Duration.ofSeconds(dDuration.longValue()));
 
+		return result;
+	}
+
+	public FFProbeResult getResult() {
 		return result;
 	}
 }
