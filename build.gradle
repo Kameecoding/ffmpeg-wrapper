@@ -1,7 +1,8 @@
 group = "com.kameecoding"
 version = "0.01-SNAPSHOT"
 
-apply plugin: 'java'
+apply plugin: 'java-library'
+apply plugin: 'maven'
 
 repositories {
     mavenCentral()

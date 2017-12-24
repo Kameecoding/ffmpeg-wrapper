@@ -1,4 +1,4 @@
-package com.kameecoding.filebot;
+package com.kameecoding.ffprobe;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.kameecoding.filebot.stream;
+package com.kameecoding.ffprobe.stream;
 
 import java.util.Locale;
 
