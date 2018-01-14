@@ -5,29 +5,38 @@ group = "com.kameecoding"
 version = "0.01-SNAPSHOT"
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    //Country Codes
-    //compile "com.neovisionaries:nv-i18n:1.22"
-    compile "org.apache.commons:commons-io:1.3.2"
+	//Country Codes
+	//compile "com.neovisionaries:nv-i18n:1.22"
 
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-    compile "org.slf4j:slf4j-api:1.7.25"
-    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
-    compile "ch.qos.logback:logback-classic:1.2.3"
-    // https://mvnrepository.com/artifact/ch.qos.logback/logback-core
-    compile "ch.qos.logback:logback-core:1.2.3"
-    // https://mvnrepository.com/artifact/org.json/json
-    compile group: 'org.json', name: 'json', version: '20170516'
+	// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+	compile "org.slf4j:slf4j-api:1.7.25"
+	// https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+	compile "ch.qos.logback:logback-classic:1.2.3"
+	// https://mvnrepository.com/artifact/ch.qos.logback/logback-core
+	compile "ch.qos.logback:logback-core:1.2.3"
+	// https://mvnrepository.com/artifact/org.json/json
+	compile group: 'org.json', name: 'json', version: '20170516'
 
-
-
-
-    testCompile "junit:junit:4.12"
+	testCompile "org.apache.commons:commons-io:1.3.2"
+	testCompile "junit:junit:4.12"
 }
 
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			repository(url: "http://94.130.55.149:8081/repository/snapshot/") {
+				authentication(userName: "admin", password: nexusPassword)
+			}
+			pom.version = "${version}"
+			pom.artifactId = "${project.name}"
+			pom.groupId = "${project.group}"
+		}
+	}
+}
