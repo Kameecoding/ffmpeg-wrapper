@@ -10,9 +10,9 @@ import java.io.InputStreamReader;
 import java.time.Duration;
 import java.util.List;
 
-
 /**
- * Created by Andrej Kovac (kameecoding) <andrej.kovac.ggc@gmail.com> on 2017-08-20.
+ * Created by Andrej Kovac (kameecoding) <andrej.kovac.ggc@gmail.com> on
+ * 2017-08-20.
  */
 public class FFProbe implements Runnable {
 
@@ -25,8 +25,7 @@ public class FFProbe implements Runnable {
 	private BufferedReader stdError;
 	private FFProbeResult result;
 
-
-	FFProbe() {
+	public FFProbe() {
 
 	}
 
@@ -40,15 +39,12 @@ public class FFProbe implements Runnable {
 	@Override
 	public void run() {
 		try {
-
 			process = processBuilder.start();
-
 			stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
 			stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 
 			// read the output from the command
-			//System.out.println("Here is the standard output of the command:\n");
+			// System.out.println("Here is the standard output of the command:\n");
 			StringBuilder sb = new StringBuilder();
 			String s = null;
 			while ((s = stdInput.readLine()) != null) {
@@ -129,5 +125,9 @@ public class FFProbe implements Runnable {
 
 	public FFProbeResult getResult() {
 		return result;
+	}
+
+	public boolean isSuccess() {
+		return success;
 	}
 }
