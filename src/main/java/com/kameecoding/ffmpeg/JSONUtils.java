@@ -21,12 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
  * SOFTWARE. 
  */ 
-pacakge com.kameecoding.ffmpeg;
+package com.kameecoding.ffmpeg;
 
 import org.json.JSONObject;
 
 /**
- * Created by Andrej Kovac (kameecoding) <andrej.kovac.ggc@gmail.com> on 29/09/2017.
+ * Created by Andrej Kovac (kameecoding) <kamee@kameecoding.com> on 29/09/2017.
  */
 public class JSONUtils {
 

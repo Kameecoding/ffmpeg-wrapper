@@ -24,9 +24,40 @@
 package com.kameecoding.ffmpeg.entity;
 
 /**
- * @author Kameecoding (andrej.kovac.ggc@gmail.com) on 2018-01-23
+ * @author Andrej Kovac (kameecoding) <kamee@kameecoding.com> on 2018-01-23
  *
  */
 public class Dimensions {
-
+	private int width;
+	private int height;
+	private int coded_width;
+	private int coded_height;
+	
+	public Dimensions() {
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	public void setWidth(int width) {
+		this.width = width;
+	}
+	public int getHeight() {
+		return height;
+	}
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	public int getCoded_width() {
+		return coded_width;
+	}
+	public void setCoded_width(int coded_width) {
+		this.coded_width = coded_width;
+	}
+	public int getCoded_height() {
+		return coded_height;
+	}
+	public void setCoded_height(int coded_height) {
+		this.coded_height = coded_height;
+	}
 }

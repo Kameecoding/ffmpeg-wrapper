@@ -21,14 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
  * SOFTWARE. 
  */ 
-pacakge com.kameecoding.ffmpeg.entity;
+package com.kameecoding.ffmpeg.entity;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Andrej Kovac (kameecoding) <andrej.kovac.ggc@gmail.com> on 2017-09-24.
+ * Created by Andrej Kovac (kameecoding) <kamee@kameecoding.com> on 2017-09-24.
  */
 public class FFProbeResult {
 

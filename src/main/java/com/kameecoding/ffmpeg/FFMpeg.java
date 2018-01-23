@@ -21,12 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
  * SOFTWARE. 
  */ 
-pacakge com.kameecoding.ffmpeg;
+package com.kameecoding.ffmpeg;
 
 import java.util.List;
 
 /**
- * Created by Andrej Kovac (kameecoding) <andrej.kovac.ggc@gmail.com> on 2017-08-20.
+ * Created by Andrej Kovac (kameecoding) <kamee@kameecoding.com> on 2017-08-20.
  */
 public class FFMpeg implements Runnable {
 

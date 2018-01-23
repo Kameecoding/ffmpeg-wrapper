@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
  * SOFTWARE. 
  */ 
-pacakge com.kameecoding.ffmpeg.entity;
+package com.kameecoding.ffmpeg.entity;
 
 /**
- * Created by Andrej Kovac (kameecoding) <andrej.kovac.ggc@gmail.com> on 29/09/2017.
+ * Created by Andrej Kovac (kameecoding) <kamee@kameecoding.com> on 29/09/2017.
  */
 public class VideoStream {
 
