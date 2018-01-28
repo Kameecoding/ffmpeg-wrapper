@@ -23,15 +23,21 @@
  */ 
 package com.kameecoding.ffmpeg;
 
-import com.kameecoding.ffmpeg.entity.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.Duration;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.kameecoding.ffmpeg.entity.AudioCodec;
+import com.kameecoding.ffmpeg.entity.AudioStream;
+import com.kameecoding.ffmpeg.entity.FFProbeResult;
+import com.kameecoding.ffmpeg.entity.Language;
+import com.kameecoding.ffmpeg.entity.SubtitleStream;
+import com.kameecoding.ffmpeg.entity.VideoStream;
 
 /**
  * Created by Andrej Kovac (kameecoding) <kamee@kameecoding.com> on
@@ -43,7 +49,7 @@ public class FFProbe implements Runnable {
 	private Process process;
 
 	private boolean success;
-	private boolean finished;
+
 	private BufferedReader stdInput;
 	private BufferedReader stdError;
 	private FFProbeResult result;
@@ -64,7 +70,7 @@ public class FFProbe implements Runnable {
 		try {
 			process = processBuilder.start();
 			stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+			//stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 
 			// read the output from the command
 			// System.out.println("Here is the standard output of the command:\n");
@@ -76,7 +82,7 @@ public class FFProbe implements Runnable {
 
 			s = sb.toString();
 			result = parseProbe(s);
-			finished = true;
+			success = true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -114,12 +120,20 @@ public class FFProbe implements Runnable {
 					audioStreamFactory.bitrate(tags.getString("BPS"));
 				}
 				audioStreamFactory.channels(currentObject.getInt("channels"));
-				audioStreamFactory.mapping("0:" + String.valueOf(currentObject.getInt("index")));
+				audioStreamFactory.mapping(currentObject.getInt("index"));
+				if (JSONUtils.hasObject(currentObject, "profile")) {
+					audioStreamFactory.profile(currentObject.getString("profile"));
+				}
 				result.getAudios().add(audioStreamFactory.build());
 			}
 
 			if (currentObject.getString("codec_type").equals("subtitle")) {
-				String mapping = "0:" + String.valueOf(currentObject.getInt("index"));
+				String codecName = null;
+				if (currentObject.has("codec_name")) {
+					//SKIP subtitles that cannot be extracted for now
+					codecName = currentObject.getString("codec_name");
+				}
+				int mapping = currentObject.getInt("index");
 				JSONObject tags = currentObject.getJSONObject("tags");
 				String title = null;
 
@@ -132,7 +146,7 @@ public class FFProbe implements Runnable {
 				JSONObject disposition = currentObject.getJSONObject("disposition");
 				int forced = disposition.getInt("forced");
 				isForced = forced == 1 || ("forced".equals(title));
-				result.getSubtitles().add(SubtitleStream.newInstance(mapping, language, isForced));
+				result.getSubtitles().add(SubtitleStream.newInstance(mapping, language, isForced, codecName));
 			}
 		}
 

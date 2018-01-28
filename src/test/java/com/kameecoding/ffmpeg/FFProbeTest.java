@@ -37,6 +37,7 @@ import java.time.Duration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -63,10 +64,15 @@ public class FFProbeTest {
 					"UTF-8"
 			);
 
-			/*output3 = IOUtils.toString(
+			output3 = IOUtils.toString(
 					this.getClass().getResourceAsStream("probe_output3.json"),
 					"UTF-8"
-			);*/
+			);
+			
+			output4 = IOUtils.toString(
+					this.getClass().getResourceAsStream("probe_output4.json"),
+					"UTF-8"
+			);
 		} catch (Exception e) {
 			logger.error("Failed to read test files", e);
 		}
@@ -92,30 +98,32 @@ public class FFProbeTest {
 		assertEquals("448000", firstAudio.getBitRate());
 		assertEquals("ac3", firstAudio.getCodec().getName());
 		assertEquals(6, firstAudio.getChannels());
-		assertEquals("0:1", firstAudio.getStreamMapping());
+		assertEquals(1, firstAudio.getStreamMapping());
 		assertEquals("hun", firstAudio.getLanguage().getAlpha3());
+		assertNull(firstAudio.getProfile());
 
 		AudioStream secondAudio = probeResult.getAudios().get(1);
 		assertEquals("1536000", secondAudio.getBitRate());
 		assertEquals("dts", secondAudio.getCodec().getName());
 		assertEquals(6, secondAudio.getChannels());
-		assertEquals("0:2", secondAudio.getStreamMapping());
+		assertEquals(2, secondAudio.getStreamMapping());
 		assertEquals("eng", secondAudio.getLanguage().getAlpha3());
+		assertEquals("DTS", secondAudio.getProfile());
 
 		assertEquals(3, probeResult.getSubtitles().size());
 
 		SubtitleStream firstSub = probeResult.getSubtitles().get(0);
-		assertEquals("0:3", firstSub.getStreamMapping());
+		assertEquals(3, firstSub.getStreamMapping());
 		assertEquals("hun", firstSub.getLanguage().getAlpha3());
 		assertTrue(firstSub.isForced());
 
 		SubtitleStream secondSub = probeResult.getSubtitles().get(1);
-		assertEquals("0:4", secondSub.getStreamMapping());
+		assertEquals(4, secondSub.getStreamMapping());
 		assertEquals("hun", secondSub.getLanguage().getAlpha3());
 		assertFalse(secondSub.isForced());
 
 		SubtitleStream thirdSub = probeResult.getSubtitles().get(2);
-		assertEquals("0:5", thirdSub.getStreamMapping());
+		assertEquals(5, thirdSub.getStreamMapping());
 		assertEquals("eng", thirdSub.getLanguage().getAlpha3());
 		assertFalse(thirdSub.isForced());
 	}
@@ -138,34 +146,35 @@ public class FFProbeTest {
 		assertEquals("3650025", firstAudio.getBitRate());
 		assertEquals("dts", firstAudio.getCodec().getName());
 		assertEquals(6, firstAudio.getChannels());
-		assertEquals("0:1", firstAudio.getStreamMapping());
+		assertEquals(1, firstAudio.getStreamMapping());
 		assertEquals("eng", firstAudio.getLanguage().getAlpha3());
+		assertEquals("DTS-HD MA",firstAudio.getProfile());
 
 		AudioStream secondAudio = probeResult.getAudios().get(1);
 		assertEquals("448000", secondAudio.getBitRate());
 		assertEquals("ac3", secondAudio.getCodec().getName());
 		assertEquals(6, secondAudio.getChannels());
-		assertEquals("0:2", secondAudio.getStreamMapping());
+		assertEquals(2, secondAudio.getStreamMapping());
 		assertEquals("hun", secondAudio.getLanguage().getAlpha3());
+		assertNull(secondAudio.getProfile());
 
 		assertEquals(3, probeResult.getSubtitles().size());
 
 		SubtitleStream firstSub = probeResult.getSubtitles().get(0);
-		assertEquals("0:3", firstSub.getStreamMapping());
+		assertEquals(3, firstSub.getStreamMapping());
 		assertEquals("hun", firstSub.getLanguage().getAlpha3());
 		assertFalse(firstSub.isForced());
 
 		SubtitleStream secondSub = probeResult.getSubtitles().get(1);
-		assertEquals("0:4", secondSub.getStreamMapping());
+		assertEquals(4, secondSub.getStreamMapping());
 		assertEquals("hun", secondSub.getLanguage().getAlpha3());
 		assertTrue(secondSub.isForced());
 
 		SubtitleStream thirdSub = probeResult.getSubtitles().get(2);
-		assertEquals("0:5", thirdSub.getStreamMapping());
+		assertEquals(5, thirdSub.getStreamMapping());
 		assertEquals("eng", thirdSub.getLanguage().getAlpha3());
 		assertFalse(thirdSub.isForced());
 	}
-
 
 	public void standardTestOutput3() {
 		FFProbe probe = new FFProbe();
@@ -180,5 +189,13 @@ public class FFProbeTest {
 		assertEquals(2, firstAudio.getChannels());
 		assertEquals("0:1", firstAudio.getStreamMapping());
 		assertEquals("jpn", firstAudio.getLanguage().getAlpha3());
+	}
+	
+	public void standardTestOutput4() {
+		
+	}
+	
+	public void standardTestOutput5() {
+	
 	}
 }

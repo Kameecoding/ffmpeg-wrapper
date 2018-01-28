@@ -20,7 +20,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
  * SOFTWARE. 
- */ 
+ */
 package com.kameecoding.ffmpeg.entity;
 
 /**
@@ -28,34 +28,40 @@ package com.kameecoding.ffmpeg.entity;
  */
 public class SubtitleStream {
 
-    private Language language;
-    private String streamMapping;
+	private Language language;
+	private int streamMapping;
+	private String codecName;
 
-    private boolean forced;
+	private boolean forced;
 
-    private SubtitleStream() {
+	private SubtitleStream() {
 
-    }
+	}
 
-    public static SubtitleStream newInstance(String streamMapping, Language language, boolean forced) {
-        SubtitleStream subtitleStream = new SubtitleStream();
+	public static SubtitleStream newInstance(int streamMapping, Language language, boolean forced, String codecName) {
+		SubtitleStream subtitleStream = new SubtitleStream();
 
-        subtitleStream.streamMapping = streamMapping;
-        subtitleStream.language = language;
-        subtitleStream.forced = forced;
-
-        return subtitleStream;
-    }
+		subtitleStream.streamMapping = streamMapping;
+		subtitleStream.language = language;
+		subtitleStream.forced = forced;
+		subtitleStream.codecName = codecName;
+		
+		return subtitleStream;
+	}
 
 	public Language getLanguage() {
 		return language;
 	}
 
-	public String getStreamMapping() {
+	public int getStreamMapping() {
 		return streamMapping;
 	}
 
 	public boolean isForced() {
-        return forced;
-    }
+		return forced;
+	}
+
+	public String getCodecName() {
+		return codecName;
+	}
 }

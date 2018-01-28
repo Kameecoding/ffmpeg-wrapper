@@ -20,27 +20,49 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
  * SOFTWARE. 
- */ 
+ */
 package com.kameecoding.ffmpeg;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
  * Created by Andrej Kovac (kameecoding) <kamee@kameecoding.com> on 2017-08-20.
  */
 public class FFMpeg implements Runnable {
+	
+	private ProcessBuilder processBuilder;
+	private Process process;
 
+	private boolean success;
+	//private BufferedReader stdInput;
+	//private BufferedReader stdError;
 
-    private FFMpeg() {
+	private FFMpeg() {
 
-    }
+	}
 
-    public static FFMpeg newInstance(String executable, List<String> args) {
-        return new FFMpeg();
-    }
+	public static FFMpeg newInstance(String executable, List<String> args) {
+		FFMpeg ffmpeg = new FFMpeg();
+		args.add(0, executable);
+		ffmpeg.processBuilder.command(args);
+		return ffmpeg;
+	}
 
-    @Override
-    public void run() {
+	@Override
+	public void run() {
+		try {
+			process = processBuilder.start();
+			//stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			success = true;
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-    }
+	public boolean isSuccess() {
+		return success;
+	}
 }

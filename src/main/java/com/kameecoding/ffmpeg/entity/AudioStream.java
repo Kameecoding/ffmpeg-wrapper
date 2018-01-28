@@ -20,7 +20,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
  * SOFTWARE. 
- */ 
+ */
 package com.kameecoding.ffmpeg.entity;
 
 /**
@@ -29,57 +29,63 @@ package com.kameecoding.ffmpeg.entity;
 public class AudioStream {
 
 	private Language language;
-    private String streamMapping;
-    private AudioCodec codec;
-    private String bitRate;
+	private int streamMapping;
+	private AudioCodec codec;
+	private String bitRate;
 	private int channels;
+	private String profile;
 
-    private AudioStream() {
+	private AudioStream() {
 
-    }
+	}
 
 	public static class AudioStreamFactory {
-    	private AudioStream audioStream;
+		private AudioStream audioStream;
 
-    	public AudioStreamFactory() {
-		    audioStream = new AudioStream();
-	    }
+		public AudioStreamFactory() {
+			audioStream = new AudioStream();
+		}
 
-	    public AudioStreamFactory language(Language language) {
-		    audioStream.language = language;
-    		return this;
-	    }
-
-	    public AudioStreamFactory mapping(String streamMapping) {
-		    audioStream.streamMapping = streamMapping;
-    		return this;
-	    }
-
-	    public AudioStreamFactory codec(AudioCodec codec) {
-		    audioStream.codec = codec;
-		    return this;
-	    }
-
-	    public AudioStreamFactory channels(int channels) {
-	        audioStream.channels = channels;
-    		return this;
-	    }
-
-	    public AudioStreamFactory bitrate(String bitrate) {
-	        audioStream.bitRate = bitrate;
+		public AudioStreamFactory language(Language language) {
+			audioStream.language = language;
 			return this;
-	    }
+		}
 
-	    public AudioStream build() {
-    		return audioStream;
-	    }
+		public AudioStreamFactory mapping(int streamMapping) {
+			audioStream.streamMapping = streamMapping;
+			return this;
+		}
+
+		public AudioStreamFactory codec(AudioCodec codec) {
+			audioStream.codec = codec;
+			return this;
+		}
+
+		public AudioStreamFactory channels(int channels) {
+			audioStream.channels = channels;
+			return this;
+		}
+
+		public AudioStreamFactory bitrate(String bitrate) {
+			audioStream.bitRate = bitrate;
+			return this;
+		}
+		
+		public AudioStreamFactory profile(String profile) {
+			audioStream.profile = profile;
+			return this;
+		}
+
+		public AudioStream build() {
+			return audioStream;
+		}
 	}
 
 	public Language getLanguage() {
 		return language;
 	}
 
-	public String getStreamMapping() {
+	public int getStreamMapping() {
 		return streamMapping;
 	}
 
@@ -93,5 +99,9 @@ public class AudioStream {
 
 	public int getChannels() {
 		return channels;
+	}
+
+	public String getProfile() {
+		return profile;
 	}
 }

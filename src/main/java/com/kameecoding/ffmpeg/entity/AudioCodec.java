@@ -20,44 +20,43 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
  * SOFTWARE. 
- */ 
+ */
 package com.kameecoding.ffmpeg.entity;
 
 /**
  * Created by Andrej Kovac (kameecoding) <kamee@kameecoding.com> on 2017-09-24.
  */
 public enum AudioCodec {
-        AAC("aac"),
-        AC3("ac3"),
-        AMR("amr"),
-        EAC3("eac3"),
-        MP3("mp3"),
-        WMA("wma"),
-        DTS("dts"),
-        UNKOWN("unkown");
+	AAC("aac"),
+	AC3("ac3"),
+	AMR("amr"),
+	EAC3("eac3"),
+	MP3("mp3"),
+	WMA("wma"),
+	DTS("dts"),
+	UNKOWN("unkown");
 
+	private final String name;
 
-        private final String name;
+	AudioCodec(String name) {
+		this.name = name;
+	}
 
-        AudioCodec(String name) {
-                this.name = name;
-        }
+	public static AudioCodec getByNameIgnoreCase(String name) {
+		return getByName(name.toLowerCase());
+	}
 
-        public static AudioCodec getByNameIgnoreCase(String name) {
-                return getByName(name.toLowerCase());
-        }
+	public static AudioCodec getByName(String name) {
+		for (AudioCodec codec : AudioCodec.values()) {
+			if (codec.name.equals(name)) {
+				return codec;
+			}
+		}
 
-        public static AudioCodec getByName(String name) {
-            for (AudioCodec codec : AudioCodec.values()) {
-            	if (codec.name.equals(name)) {
-            		return codec;
-	            }
-            }
+		return UNKOWN;
+	}
 
-            return UNKOWN;
-        }
-
-        public String getName() {
-                return name;
-        }
+	public String getName() {
+		return name;
+	}
 }
