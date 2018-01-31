@@ -23,22 +23,23 @@
  */ 
 package com.kameecoding.ffmpeg;
 
-import com.kameecoding.ffmpeg.entity.AudioStream;
-import com.kameecoding.ffmpeg.entity.FFProbeResult;
-import com.kameecoding.ffmpeg.entity.SubtitleStream;
-import com.kameecoding.ffmpeg.entity.VideoStream;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.time.Duration;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Duration;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import com.kameecoding.ffmpeg.entity.AudioStream;
+import com.kameecoding.ffmpeg.entity.FFProbeResult;
+import com.kameecoding.ffmpeg.entity.SubtitleStream;
+import com.kameecoding.ffmpeg.entity.VideoStream;
 
 /**
  * Created by Andrej Kovac (kameecoding) <kamee@kameecoding.com> on 2017-09-24.
@@ -80,9 +81,7 @@ public class FFProbeTest {
 
 	@Test
 	public void standardTestOutput1() {
-		FFProbe probe = new FFProbe();
-
-		FFProbeResult probeResult = probe.parseProbe(output1);
+		FFProbeResult probeResult = FFProbe.parseProbe(output1);
 
 		assertEquals(probeResult.getDuration(), Duration.ofSeconds(6647L));
 
@@ -130,9 +129,7 @@ public class FFProbeTest {
 
 	@Test
 	public void standardTestOutput2() {
-		FFProbe probe = new FFProbe();
-
-		FFProbeResult probeResult = probe.parseProbe(output2);
+		FFProbeResult probeResult = FFProbe.parseProbe(output2);
 		assertEquals(probeResult.getDuration(), Duration.ofSeconds(7134L));
 
 		assertEquals(1, probeResult.getVideos().size());
@@ -177,9 +174,7 @@ public class FFProbeTest {
 	}
 
 	public void standardTestOutput3() {
-		FFProbe probe = new FFProbe();
-
-		FFProbeResult probeResult = probe.parseProbe(output3);
+		FFProbeResult probeResult = FFProbe.parseProbe(output3);
 
 		assertEquals(1, probeResult.getAudios().size());
 

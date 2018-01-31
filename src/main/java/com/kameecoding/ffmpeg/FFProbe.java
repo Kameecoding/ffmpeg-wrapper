@@ -27,10 +27,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.kameecoding.ffmpeg.entity.AudioCodec;
 import com.kameecoding.ffmpeg.entity.AudioStream;
@@ -44,6 +47,7 @@ import com.kameecoding.ffmpeg.entity.VideoStream;
  * 2017-08-20.
  */
 public class FFProbe implements Runnable {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FFProbe.class);
 
 	private ProcessBuilder processBuilder;
 	private Process process;
@@ -51,7 +55,6 @@ public class FFProbe implements Runnable {
 	private boolean success;
 
 	private BufferedReader stdInput;
-	private BufferedReader stdError;
 	private FFProbeResult result;
 
 	public FFProbe() {
@@ -60,35 +63,51 @@ public class FFProbe implements Runnable {
 
 	public static FFProbe newInstance(String executable, List<String> args) {
 		FFProbe ffProbe = new FFProbe();
-		args.add(0, executable);
-		ffProbe.processBuilder.command(args);
+		List<String> arguments = new ArrayList<>(args);
+		arguments.add(0, executable);
+		ffProbe.processBuilder = new ProcessBuilder(arguments);
 		return ffProbe;
 	}
 
 	@Override
 	public void run() {
 		try {
+			LOGGER.info("FFPRobe running");
+			//processBuilder.redirectErrorStream();
+			//processBuilder.redirectError(Redirect.INHERIT);
 			process = processBuilder.start();
 			stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			
 			//stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 
 			// read the output from the command
 			// System.out.println("Here is the standard output of the command:\n");
+			boolean finished = false;
 			StringBuilder sb = new StringBuilder();
 			String s = null;
-			while ((s = stdInput.readLine()) != null) {
-				sb.append(s);
+			while (!finished) {
+				
+				if (stdInput.ready()) {
+					s = stdInput.readLine();
+					if (s == null) {
+						break;
+					}
+					sb.append(s);
+				} else if (!process.isAlive()) {
+					break;
+				}
 			}
 
 			s = sb.toString();
 			result = parseProbe(s);
 			success = true;
+			LOGGER.info("FFPRobe Successfully finished");
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error("FFProbe failed", e);
 		}
 	}
 
-	FFProbeResult parseProbe(String s) {
+	public static FFProbeResult parseProbe(String s) {
 		FFProbeResult result = new FFProbeResult();
 		JSONObject jsonObject = new JSONObject(s);
 		JSONArray array = jsonObject.getJSONArray("streams");
