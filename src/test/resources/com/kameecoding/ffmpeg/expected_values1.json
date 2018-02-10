@@ -1,0 +1,51 @@
+{
+  "duration": 6647,
+  "video": {
+    "width": 1920,
+    "height": 804,
+    "bitrate": "12191830"
+  },
+  "audio": {
+    "streams": [
+      {
+        "mapping": 1,
+        "bitrate": "448000",
+        "codec": "ac3",
+        "channels": 6,
+        "language": "hun",
+        "profile": null
+      },
+      {
+        "mapping": 2,
+        "bitrate": "1536000",
+        "codec": "dts",
+        "channels": 6,
+        "language": "eng",
+        "profile": "DTS"
+      }
+    ]
+  },
+  "subtitle": {
+    "streams": [
+      {
+        "mapping": 3,
+        "language": "hun",
+        "forced": "true",
+        "codec": "subrip"
+      },
+      {
+        "mapping": 4,
+        "language": "hun",
+        "forced": "false",
+        "codec": "subrip"
+      },
+      {
+        "mapping": 5,
+        "language": "eng",
+        "forced": "false",
+        "codec": "subrip"
+      }
+    ]
+  }
+}
+

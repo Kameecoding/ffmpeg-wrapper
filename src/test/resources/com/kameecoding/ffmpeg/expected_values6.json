@@ -1,0 +1,83 @@
+{
+  "duration": 7051,
+  "video": {
+    "width": 3840,
+    "height": 2160,
+    "bitrate": "49991281"
+  },
+  "audio": {
+    "streams": [
+      {
+        "mapping": 1,
+        "bitrate": "640000",
+        "codec": "ac3",
+        "channels": 6,
+        "language": "hun",
+        "profile": null
+      },
+      {
+        "mapping": 2,
+        "bitrate": "192000",
+        "codec": "ac3",
+        "channels": 2,
+        "language": "hun",
+        "profile": null
+      },
+      {
+        "mapping": 3,
+        "bitrate": "192000",
+        "codec": "ac3",
+        "channels": 2,
+        "language": "hun",
+        "profile": null
+      },
+      {
+        "mapping": 4,
+        "bitrate": "192000",
+        "codec": "ac3",
+        "channels": 2,
+        "language": "hun",
+        "profile": null
+      },
+      {
+        "mapping": 7,
+        "bitrate": "4336119",
+        "codec": "truehd",
+        "channels": 8,
+        "language": "eng",
+        "profile": null
+      },
+      {
+        "mapping": 8,
+        "bitrate": "448000",
+        "codec": "ac3",
+        "channels": 6,
+        "language": "eng",
+        "profile": null
+      }
+    ]
+  },
+  "subtitle": {
+    "streams": [
+      {
+        "mapping": 5,
+        "language": "hun",
+        "forced": "true",
+        "codec": "subrip"
+      },
+      {
+        "mapping": 6,
+        "language": "hun",
+        "forced": "false",
+        "codec": "subrip"
+      },
+      {
+        "mapping": 9,
+        "language": "eng",
+        "forced": "false",
+        "codec": "hdmv_pgs_subtitle"
+      }
+    ]
+  }
+}
+

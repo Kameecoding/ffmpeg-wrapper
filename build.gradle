@@ -5,23 +5,24 @@ group = "com.kameecoding"
 version = "0.01-SNAPSHOT"
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-	//Country Codes
-	//compile "com.neovisionaries:nv-i18n:1.22"
+    //Country Codes
+    //compile "com.neovisionaries:nv-i18n:1.22"
 
-	// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-	compile "org.slf4j:slf4j-api:1.7.25"
-	// https://mvnrepository.com/artifact/org.json/json
-	compile "org.json:json:20170516"
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    api "org.slf4j:slf4j-api:1.7.25"
+    api "com.neovisionaries:nv-i18n:1.22"
+    // https://mvnrepository.com/artifact/org.json/json
+    implementation "org.json:json:20170516"
 
-	testCompile "org.apache.commons:commons-io:1.3.2"
-	testCompile "junit:junit:4.12"
+    testCompile "org.apache.commons:commons-io:1.3.2"
+    testCompile "junit:junit:4.12"
 }
 
 /*

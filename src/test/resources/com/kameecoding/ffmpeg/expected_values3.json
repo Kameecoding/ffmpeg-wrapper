@@ -1,0 +1,31 @@
+{
+  "duration": 1435,
+  "video": {
+    "width": 1280,
+    "height": 720,
+    "bitrate": "1770990"
+  },
+  "audio": {
+    "streams": [
+      {
+        "mapping": 1,
+        "bitrate": "127999",
+        "codec": "aac",
+        "channels": 2,
+        "language": "jpn",
+        "profile": "LC"
+      }
+    ]
+  },
+  "subtitle": {
+    "streams": [
+      {
+        "mapping": 2,
+        "language": "eng",
+        "forced": "false",
+        "codec": "ass"
+      }
+    ]
+  }
+}
+

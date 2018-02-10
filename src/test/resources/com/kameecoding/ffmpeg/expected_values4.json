@@ -1,0 +1,31 @@
+{
+  "duration": 1367,
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "bitrate": "2074320"
+  },
+  "audio": {
+    "streams": [
+      {
+        "mapping": 1,
+        "bitrate": "640000",
+        "codec": "eac3",
+        "channels": 6,
+        "language": "eng",
+        "profile": null
+      }
+    ]
+  },
+  "subtitle": {
+    "streams": [
+      {
+        "mapping": 2,
+        "language": "eng",
+        "forced": "false",
+        "codec": "subrip"
+      }
+    ]
+  }
+}
+

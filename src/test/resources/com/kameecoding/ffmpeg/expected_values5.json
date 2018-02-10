@@ -1,0 +1,59 @@
+{
+  "duration": 6394,
+  "video": {
+    "width": 3840,
+    "height": 2160,
+    "bitrate": "64986519"
+  },
+  "audio": {
+    "streams": [
+      {
+        "mapping": 1,
+        "bitrate": "448000",
+        "codec": "ac3",
+        "channels": 6,
+        "language": "hun",
+        "profile": null
+      },
+      {
+        "mapping": 2,
+        "bitrate": "4016161",
+        "codec": "dts",
+        "channels": 8,
+        "language": "eng",
+        "profile": "DTS-HD MA"
+      },
+      {
+        "mapping": 3,
+        "bitrate": "1536000",
+        "codec": "dts",
+        "channels": 6,
+        "language": "eng",
+        "profile": "DTS"
+      }
+    ]
+  },
+  "subtitle": {
+    "streams": [
+      {
+        "mapping": 4,
+        "language": "hun",
+        "forced": "false",
+        "codec": "subrip"
+      },
+      {
+        "mapping": 5,
+        "language": "eng",
+        "forced": "false",
+        "codec": "hdmv_pgs_subtitle"
+      },
+      {
+        "mapping": 6,
+        "language": "eng",
+        "forced": "false",
+        "codec": "hdmv_pgs_subtitle"
+      }
+    ]
+  }
+}
+
