@@ -1,12 +1,7 @@
-package com.kameecoding.ffmpeg.entity;
+package com.kameecoding.ffmpeg.dto;
 
 import com.neovisionaries.i18n.LanguageAlpha3Code;
 
-/**
- * Immutable object describing the properties of an audiostream
- *
- * <p>Created by Andrej Kovac kameecoding (kamee@kameecoding.com) on 2017-08-20.
- */
 public class AudioStream {
 
     private LanguageAlpha3Code language;

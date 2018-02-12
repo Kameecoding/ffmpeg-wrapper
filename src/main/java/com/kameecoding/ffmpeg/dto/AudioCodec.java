@@ -1,8 +1,5 @@
-package com.kameecoding.ffmpeg.entity;
+package com.kameecoding.ffmpeg.dto;
 
-/**
- * kameecoding (kamee@kameecoding.com) on 2017-09-24.
- */
 public enum AudioCodec {
     AAC("aac"),
     AC3("ac3"),

@@ -1,6 +1,6 @@
 package com.kameecoding.ffmpeg;
 
-import com.kameecoding.ffmpeg.entity.*;
+import com.kameecoding.ffmpeg.dto.*;
 import com.neovisionaries.i18n.LanguageAlpha3Code;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,9 +16,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * kameecoding (kamee@kameecoding.com) on 2017-08-20.
- */
 public class FFProbe implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(FFProbe.class);
 

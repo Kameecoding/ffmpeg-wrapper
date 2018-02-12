@@ -1,9 +1,7 @@
-package com.kameecoding.ffmpeg.entity;
+package com.kameecoding.ffmpeg.dto;
 
 /**
- * Immutable object describing video stream
- *
- * <p>Created by Andrej Kovac kameecoding (kamee@kameecoding.com) on 29/09/2017.
+ * Immutable object for video stream
  */
 public class VideoStream {
 

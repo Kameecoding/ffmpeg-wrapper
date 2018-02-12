@@ -7,7 +7,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Created by kameecoding (kamee@kameecoding.com) on 2017-08-20. */
 public class FFmpeg implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(FFmpeg.class);
 

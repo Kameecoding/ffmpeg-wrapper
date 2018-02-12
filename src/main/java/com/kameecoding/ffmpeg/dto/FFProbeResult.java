@@ -1,12 +1,9 @@
-package com.kameecoding.ffmpeg.entity;
+package com.kameecoding.ffmpeg.dto;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * kameecoding (kamee@kameecoding.com) on 2017-09-24.
- */
 public class FFProbeResult {
 
     private final List<SubtitleStream> subtitles = new ArrayList<>();

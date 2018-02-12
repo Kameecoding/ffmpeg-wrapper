@@ -1,12 +1,7 @@
-package com.kameecoding.ffmpeg.entity;
+package com.kameecoding.ffmpeg.dto;
 
 import com.neovisionaries.i18n.LanguageAlpha3Code;
 
-/**
- * Immutable object describing subtitle stream
- *
- * <p>Created by Andrej Kovac kameecoding (kamee@kameecoding.com) on 2017-08-20.
- */
 public class SubtitleStream {
 
     private LanguageAlpha3Code language;

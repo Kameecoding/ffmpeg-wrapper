@@ -1,8 +1,5 @@
 package com.kameecoding.ffmpeg.wrapper;
 
-/**
- * kameecoding (kamee@kameecoding.com) on 2017-08-20.
- */
 public enum FFMpegOptions {
     overwrite("-y", "overwrite output files"),
     map("-map", "set input stream mapping", true);

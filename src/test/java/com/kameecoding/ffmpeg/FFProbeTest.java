@@ -3,7 +3,7 @@ package com.kameecoding.ffmpeg;
 import com.kameecoding.ffmpeg.ExpectedKeys.AudioStreamKeys;
 import com.kameecoding.ffmpeg.ExpectedKeys.SubtitleStreamKeys;
 import com.kameecoding.ffmpeg.ExpectedKeys.VideoStreamKeys;
-import com.kameecoding.ffmpeg.entity.*;
+import com.kameecoding.ffmpeg.dto.*;
 import com.neovisionaries.i18n.LanguageAlpha3Code;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
