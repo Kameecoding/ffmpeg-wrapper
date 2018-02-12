@@ -1,25 +1,3 @@
-/*
- *
- *  MIT License
- *
- * <p>Copyright (c) 2018 Andrej Kovac (Kameecoding)
- *
- * <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- * and associated documentation files (the "Software"), to deal in the Software without restriction,
- * including without limitation the rights to use, copy, modify, merge, publish, distribute,
- * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
- *
- * <p>The above copyright notice and this permission notice shall be included in all copies or
- *  substantial portions of the Software.
- *
- * <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
- */
 package com.kameecoding.ffmpeg;
 
 import com.kameecoding.ffmpeg.entity.*;
@@ -30,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.ProcessBuilder.Redirect;
@@ -44,52 +23,19 @@ public class FFProbe implements Runnable {
     private ProcessBuilder processBuilder;
     private boolean success;
     private FFProbeResult result;
+    private File logfile;
 
     private FFProbe() {}
 
-    public static FFProbe newInstance(String executable, List<String> args) {
+    public static FFProbe newInstance(String executable, List<String> args, File logfile) {
         FFProbe ffProbe = new FFProbe();
+        if (logfile != null) {
+            ffProbe.logfile = logfile;
+        }
         List<String> arguments = new ArrayList<>(args);
         arguments.add(0, executable);
         ffProbe.processBuilder = new ProcessBuilder(arguments);
         return ffProbe;
-    }
-
-    @Override
-    public void run() {
-        try {
-            LOGGER.trace("FFPRobe running");
-            // processBuilder.redirectErrorStream();
-            processBuilder.redirectError(Redirect.INHERIT);
-            Process process = processBuilder.start();
-            BufferedReader stdInput =
-                    new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-            // stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-
-            // read the output from the command
-            // System.out.println("Here is the standard output of the command:\n");
-            StringBuilder sb = new StringBuilder();
-            String s;
-            while (true) {
-                if (stdInput.ready()) {
-                    s = stdInput.readLine();
-                    if (s == null) {
-                        break;
-                    }
-                    sb.append(s);
-                } else if (!process.isAlive()) {
-                    break;
-                }
-            }
-
-            s = sb.toString();
-            result = parseProbe(s);
-            success = true;
-            LOGGER.trace("FFPRobe Successfully finished");
-        } catch (IOException e) {
-            LOGGER.error("FFProbe failed", e);
-        }
     }
 
     public static FFProbeResult parseProbe(String s) {
@@ -149,14 +95,26 @@ public class FFProbe implements Runnable {
         AudioStream.AudioStreamFactory audioStreamFactory = new AudioStream.AudioStreamFactory();
         AudioCodec codec = AudioCodec.getByNameIgnoreCase(currentObject.getString("codec_name"));
         audioStreamFactory.codec(codec);
-        JSONObject tags = currentObject.getJSONObject("tags");
-        audioStreamFactory.language(
-                LanguageAlpha3Code.getByCodeIgnoreCase(tags.getString("language")));
+        JSONObject tags = null;
+        if (JSONUtils.hasObject(currentObject, "tags")) {
+            tags = currentObject.getJSONObject("tags");
+        }
+        if (tags != null && JSONUtils.hasObject(tags, "language")) {
+            audioStreamFactory.language(
+                    LanguageAlpha3Code.getByCodeIgnoreCase(tags.getString("language")));
+        } else {
+            audioStreamFactory.language(LanguageAlpha3Code.undefined);
+        }
+
         if (JSONUtils.hasObject(currentObject, "bit_rate")) {
             audioStreamFactory.bitrate(currentObject.getString("bit_rate"));
-        } else if (JSONUtils.hasObject(tags, "BPS")) {
+        } else if (tags != null && JSONUtils.hasObject(tags, "BPS")) {
             audioStreamFactory.bitrate(tags.getString("BPS"));
+        } else {
+            LOGGER.error("Unable to determine audio bitrate");
+            //TODO no bitrate
         }
+
         audioStreamFactory.channels(currentObject.getInt("channels"));
         audioStreamFactory.mapping(currentObject.getInt("index"));
         if (JSONUtils.hasObject(currentObject, "profile")) {
@@ -174,11 +132,12 @@ public class FFProbe implements Runnable {
                         new VideoStream.VideoStreamFactory();
                 videoStreamFactory.heigh(currentObject.getInt("height"));
                 videoStreamFactory.width(currentObject.getInt("width"));
-                JSONObject tags = currentObject.getJSONObject("tags");
                 if (JSONUtils.hasObject(currentObject, "bit_rate")) {
                     videoStreamFactory.bitrate(currentObject.getString("bit_rate"));
-                } else if (JSONUtils.hasObject(tags, "BPS")) {
-                    videoStreamFactory.bitrate(tags.getString("BPS"));
+                } else if (JSONUtils.hasObject(currentObject, "tags")
+                        && JSONUtils.hasObject(currentObject.getJSONObject("tags"), "BPS")) {
+                    videoStreamFactory.bitrate(
+                            currentObject.getJSONObject("tags").getString("BPS"));
                 }
 
                 return videoStreamFactory.build();
@@ -186,6 +145,43 @@ public class FFProbe implements Runnable {
         }
 
         throw new Exception("No video stream found");
+    }
+
+    @Override
+    public void run() {
+        try {
+            LOGGER.trace("FFPRobe running");
+            if (logfile != null) {
+                logfile.getParentFile().mkdirs();
+                processBuilder.redirectError(logfile);
+            } else {
+                processBuilder.redirectError(Redirect.INHERIT);
+            }
+            Process process = processBuilder.start();
+            BufferedReader stdInput =
+                    new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            StringBuilder sb = new StringBuilder();
+            String s;
+            while (true) {
+                if (stdInput.ready()) {
+                    s = stdInput.readLine();
+                    if (s == null) {
+                        break;
+                    }
+                    sb.append(s);
+                } else if (!process.isAlive()) {
+                    break;
+                }
+            }
+
+            s = sb.toString();
+            result = parseProbe(s);
+            success = true;
+            LOGGER.trace("FFPRobe Successfully finished");
+        } catch (IOException e) {
+            LOGGER.error("FFProbe failed", e);
+        }
     }
 
     public FFProbeResult getResult() {
