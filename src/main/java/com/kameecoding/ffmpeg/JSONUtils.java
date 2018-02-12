@@ -4,7 +4,9 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-/** Created by Andrej Kovac kameecoding (kamee@kameecoding.com) on 29/09/2017. */
+/**
+ * kameecoding (kamee@kameecoding.com) on 29/09/2017.
+ */
 public class JSONUtils {
 
     public static boolean hasObject(JSONObject object, String objectName) {

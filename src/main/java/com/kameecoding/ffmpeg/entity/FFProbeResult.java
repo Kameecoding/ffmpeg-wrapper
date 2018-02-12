@@ -4,7 +4,9 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Created by Andrej Kovac kameecoding (kamee@kameecoding.com) on 2017-09-24. */
+/**
+ * kameecoding (kamee@kameecoding.com) on 2017-09-24.
+ */
 public class FFProbeResult {
 
     private final List<SubtitleStream> subtitles = new ArrayList<>();

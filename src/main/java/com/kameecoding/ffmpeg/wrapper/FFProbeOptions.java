@@ -1,6 +1,8 @@
 package com.kameecoding.ffmpeg.wrapper;
 
-/** Created by Andrej Kovac kameecoding (kamee@kameecoding.com) on 06/10/2017. */
+/**
+ * kameecoding (kamee@kameecoding.com) on 06/10/2017.
+ */
 public enum FFProbeOptions {
     SHOW_FORMAT("-show_format", ""),
     SHOW_STREAMS("-show_streams", ""),

@@ -1,6 +1,8 @@
 package com.kameecoding.ffmpeg.entity;
 
-/** Created by Andrej Kovac kameecoding (kamee@kameecoding.com) on 2017-09-24. */
+/**
+ * kameecoding (kamee@kameecoding.com) on 2017-09-24.
+ */
 public enum AudioCodec {
     AAC("aac"),
     AC3("ac3"),

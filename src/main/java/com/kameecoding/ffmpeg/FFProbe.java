@@ -16,7 +16,9 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Created by Andrej Kovac kameecoding (kamee@kameecoding.com) on 2017-08-20. */
+/**
+ * kameecoding (kamee@kameecoding.com) on 2017-08-20.
+ */
 public class FFProbe implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(FFProbe.class);
 
