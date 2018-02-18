@@ -32,15 +32,15 @@ public class FFProbeTest {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private class TestCase {
-        private FFProbeResult probeResult;
+        private ProbeResult probeResult;
         private JSONObject expectedResult;
 
-        TestCase(FFProbeResult probeResult, JSONObject expectedResult) {
+        TestCase(ProbeResult probeResult, JSONObject expectedResult) {
             this.probeResult = probeResult;
             this.expectedResult = expectedResult;
         }
 
-        FFProbeResult getProbeResult() {
+        ProbeResult getProbeResult() {
             return probeResult;
         }
 
@@ -74,7 +74,7 @@ public class FFProbeTest {
     public void probeOutputTest() {
         for (Map.Entry<String, TestCase> entry : testCases.entrySet()) {
             String name = entry.getKey();
-            FFProbeResult probeResult = entry.getValue().getProbeResult();
+            ProbeResult probeResult = entry.getValue().getProbeResult();
             JSONObject expected = entry.getValue().getExpectedResult();
             assertEquals(
                     name,

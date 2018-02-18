@@ -7,7 +7,6 @@ public class SubtitleStream {
     private LanguageAlpha3Code language;
     private int streamMapping;
     private String codecName;
-
     private boolean forced;
 
     private SubtitleStream() {}

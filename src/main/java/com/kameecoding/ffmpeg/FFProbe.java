@@ -1,6 +1,9 @@
 package com.kameecoding.ffmpeg;
 
-import com.kameecoding.ffmpeg.dto.*;
+import com.kameecoding.ffmpeg.dto.AudioCodec;
+import com.kameecoding.ffmpeg.dto.AudioStream;
+import com.kameecoding.ffmpeg.dto.SubtitleStream;
+import com.kameecoding.ffmpeg.dto.VideoStream;
 import com.neovisionaries.i18n.LanguageAlpha3Code;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,15 +19,18 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.kameecoding.ffmpeg.ProbeResult.Result.*;
+
 public class FFProbe implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(FFProbe.class);
 
     private ProcessBuilder processBuilder;
     private boolean success;
-    private FFProbeResult result;
+    private ProbeResult result;
     private File logfile;
 
-    private FFProbe() {}
+    private FFProbe() {
+    }
 
     public static FFProbe newInstance(String executable, List<String> args, File logfile) {
         FFProbe ffProbe = new FFProbe();
@@ -37,21 +43,22 @@ public class FFProbe implements Runnable {
         return ffProbe;
     }
 
-    public static FFProbeResult parseProbe(String s) {
-
+    public static ProbeResult parseProbe(String s) {
+        ProbeResult result =
+                new ProbeResult();
         JSONObject jsonObject = new JSONObject(s);
         JSONArray array = jsonObject.getJSONArray("streams");
         VideoStream videoStream = null;
         try {
-            videoStream = parseVideoStream(array);
+            result.videoStream = parseVideoStream(array);
         } catch (Exception e) {
             LOGGER.error("No video stream found", e);
+            result.result = FAILED;
         }
         JSONObject format = jsonObject.getJSONObject("format");
         String duration = format.getString("duration");
         Double dDuration = Double.valueOf(duration);
-        FFProbeResult result =
-                new FFProbeResult(videoStream, Duration.ofSeconds(dDuration.longValue()));
+        result.duration = Duration.ofSeconds(dDuration.longValue());
 
         for (int i = 0; i < array.length(); ++i) {
             JSONObject currentObject = array.getJSONObject(i);
@@ -63,11 +70,13 @@ public class FFProbe implements Runnable {
                 parseSubtitle(result, currentObject);
             }
         }
-
+        if (result.result == UNKNOWN) {
+            result.result = SUCCESS;
+        }
         return result;
     }
 
-    private static void parseSubtitle(FFProbeResult result, JSONObject currentObject) {
+    private static void parseSubtitle(ProbeResult result, JSONObject currentObject) {
         String codecName = null;
         if (currentObject.has("codec_name")) {
             // SKIP subtitles that cannot be extracted for now
@@ -86,11 +95,11 @@ public class FFProbe implements Runnable {
         JSONObject disposition = currentObject.getJSONObject("disposition");
         int forced = disposition.getInt("forced");
         boolean isForced = forced == 1 || "forced".equals(title);
-        result.getSubtitles()
+        result.subtitles
                 .add(SubtitleStream.newInstance(mapping, language, isForced, codecName));
     }
 
-    private static void parseAudio(FFProbeResult result, JSONObject currentObject) {
+    private static void parseAudio(ProbeResult result, JSONObject currentObject) {
         AudioStream.AudioStreamFactory audioStreamFactory = new AudioStream.AudioStreamFactory();
         AudioCodec codec = AudioCodec.getByNameIgnoreCase(currentObject.getString("codec_name"));
         audioStreamFactory.codec(codec);
@@ -112,6 +121,7 @@ public class FFProbe implements Runnable {
         } else {
             LOGGER.error("Unable to determine audio bitrate");
             //TODO no bitrate
+            //result.result = FAILED;
         }
 
         audioStreamFactory.channels(currentObject.getInt("channels"));
@@ -119,7 +129,7 @@ public class FFProbe implements Runnable {
         if (JSONUtils.hasObject(currentObject, "profile")) {
             audioStreamFactory.profile(currentObject.getString("profile"));
         }
-        result.getAudios().add(audioStreamFactory.build());
+        result.audios.add(audioStreamFactory.build());
     }
 
     private static VideoStream parseVideoStream(JSONArray array) throws Exception {
@@ -180,10 +190,11 @@ public class FFProbe implements Runnable {
             LOGGER.trace("FFPRobe Successfully finished");
         } catch (IOException e) {
             LOGGER.error("FFProbe failed", e);
+            result.result = FAILED;
         }
     }
 
-    public FFProbeResult getResult() {
+    public ProbeResult getResult() {
         return result;
     }
 
