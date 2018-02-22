@@ -3,6 +3,8 @@ package com.kameecoding.ffmpeg;
 import com.kameecoding.ffmpeg.ExpectedKeys.AudioStreamKeys;
 import com.kameecoding.ffmpeg.ExpectedKeys.SubtitleStreamKeys;
 import com.kameecoding.ffmpeg.ExpectedKeys.VideoStreamKeys;
+import com.kameecoding.ffmpeg.callable.ProbeResult;
+import com.kameecoding.ffmpeg.callable.Prober;
 import com.kameecoding.ffmpeg.dto.*;
 import com.neovisionaries.i18n.LanguageAlpha3Code;
 import org.apache.commons.io.IOUtils;
@@ -20,9 +22,6 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by kameecoding (kamee@kameecoding.com) on 2017-09-24.
- */
 public class FFProbeTest {
     private static final String INPUT_PREFIX = "probe_output";
     private static final String OUTPUT_PREFIX = "expected_values";
@@ -62,7 +61,7 @@ public class FFProbeTest {
                                 "UTF-8");
                 TestCase testCase =
                         new TestCase(
-                                FFProbe.parseProbe(probe_output), new JSONObject(expected_values));
+                                Prober.parseProbe(probe_output), new JSONObject(expected_values));
                 testCases.put(inputName, testCase);
             }
         } catch (Exception e) {

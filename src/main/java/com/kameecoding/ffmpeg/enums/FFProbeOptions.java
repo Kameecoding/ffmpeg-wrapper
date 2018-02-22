@@ -1,20 +1,21 @@
-package com.kameecoding.ffmpeg.wrapper;
+package com.kameecoding.ffmpeg.enums;
 
-public enum FFMpegOptions {
-    overwrite("-y", "overwrite output files"),
-    map("-map", "set input stream mapping", true);
+public enum FFProbeOptions {
+    SHOW_FORMAT("-show_format", ""),
+    SHOW_STREAMS("-show_streams", ""),
+    OUTPUT_FORMAT("-of", "", true);
 
     private final String opt;
     private final String description;
     private final boolean hasArgument;
 
-    FFMpegOptions(String opt, String description, boolean hasArgument) {
+    FFProbeOptions(String opt, String description, boolean hasArgument) {
         this.opt = opt;
         this.description = description;
         this.hasArgument = hasArgument;
     }
 
-    FFMpegOptions(String opt, String description) {
+    FFProbeOptions(String opt, String description) {
         this.opt = opt;
         this.description = description;
         this.hasArgument = false;
@@ -22,6 +23,10 @@ public enum FFMpegOptions {
 
     public String getOpt() {
         return opt;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public boolean hasArgument() {

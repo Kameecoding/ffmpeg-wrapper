@@ -12,16 +12,13 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    //Country Codes
-    //compile "com.neovisionaries:nv-i18n:1.22"
-
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     api "org.slf4j:slf4j-api:1.7.25"
     api "com.neovisionaries:nv-i18n:1.22"
     // https://mvnrepository.com/artifact/org.json/json
     implementation "org.json:json:20170516"
+    implementation "commons-io:commons-io:2.6"
 
-    testCompile "org.apache.commons:commons-io:1.3.2"
     testCompile "junit:junit:4.12"
 }
 

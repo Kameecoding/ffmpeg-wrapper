@@ -17,13 +17,13 @@ public class FFmpeg implements Runnable {
 
     private FFmpeg() {}
 
-    public static FFmpeg newInstance(String executable, List<String> args, File logfile) {
+    public static FFmpeg newInstance(File executable, List<String> args, File logfile) {
         FFmpeg ffmpeg = new FFmpeg();
         if (logfile != null) {
             ffmpeg.logfile = logfile;
         }
         List<String> arguments = new ArrayList<>(args);
-        arguments.add(0, executable);
+        arguments.add(0, executable.getAbsolutePath());
         ffmpeg.processBuilder = new ProcessBuilder(arguments);
         return ffmpeg;
     }
@@ -38,11 +38,9 @@ public class FFmpeg implements Runnable {
             } else {
                 processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
                 processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
-
             }
             process = processBuilder.start();
             process.waitFor();
-            // stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
             success = true;
 
         } catch (Exception e) {
