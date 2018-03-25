@@ -80,11 +80,17 @@ public class Prober implements Callable<ProbeResult> {
             title = tags.getString("title").toLowerCase();
         }
 
-        LanguageAlpha3Code language =
-                LanguageAlpha3Code.getByCodeIgnoreCase(tags.getString("language"));
-        JSONObject disposition = currentObject.getJSONObject("disposition");
-        int forced = disposition.getInt("forced");
-        boolean isForced = forced == 1 || "forced".equals(title);
+        LanguageAlpha3Code language = LanguageAlpha3Code.undefined;
+        if (JSONUtils.hasObject(tags, "language")) {
+            LanguageAlpha3Code.getByCodeIgnoreCase(tags.getString("language"));
+        }
+
+        boolean isForced = false;
+        if (JSONUtils.hasObject(currentObject, "disposition")) {
+            JSONObject disposition = currentObject.getJSONObject("disposition");
+            int forced = disposition.getInt("forced");
+            isForced = forced == 1 || "forced".equals(title);
+        }
         result.subtitles.add(SubtitleStream.newInstance(mapping, language, isForced, codecName));
     }
 
