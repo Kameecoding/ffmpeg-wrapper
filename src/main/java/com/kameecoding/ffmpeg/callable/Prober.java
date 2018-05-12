@@ -6,6 +6,7 @@ import com.kameecoding.ffmpeg.dto.AudioStream;
 import com.kameecoding.ffmpeg.dto.SubtitleStream;
 import com.kameecoding.ffmpeg.dto.VideoStream;
 import com.kameecoding.ffmpeg.enums.FFProbeOptions;
+import com.kameecoding.ffmpeg.enums.ResultType;
 import com.neovisionaries.i18n.LanguageAlpha3Code;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -37,7 +38,16 @@ public class Prober implements Callable<ProbeResult> {
     public static ProbeResult parseProbe(String s) {
         ProbeResult result = new ProbeResult();
         JSONObject jsonObject = new JSONObject(s);
-        JSONArray array = jsonObject.getJSONArray("streams");
+        JSONArray array;
+        try {
+            array = jsonObject.getJSONArray("streams");
+        } catch (Exception e) {
+            LOGGER.error("No streams found in file");
+            LOGGER.error(s);
+            result.result= ResultType.FAILED;
+            return result;
+        }
+
         try {
             result.videoStream = parseVideoStream(array);
         } catch (Exception e) {
@@ -73,16 +83,22 @@ public class Prober implements Callable<ProbeResult> {
             codecName = currentObject.getString("codec_name");
         }
         int mapping = currentObject.getInt("index");
-        JSONObject tags = currentObject.getJSONObject("tags");
         String title = null;
+        LanguageAlpha3Code language = null;
+        if (JSONUtils.hasObject(currentObject, "tags")) {
+            JSONObject tags = currentObject.getJSONObject("tags");
+            title = null;
 
-        if (JSONUtils.hasObject(tags, "title")) {
-            title = tags.getString("title").toLowerCase();
-        }
+            if (JSONUtils.hasObject(tags, "title")) {
+                title = tags.getString("title").toLowerCase();
+            }
 
-        LanguageAlpha3Code language = LanguageAlpha3Code.undefined;
-        if (JSONUtils.hasObject(tags, "language")) {
-            LanguageAlpha3Code.getByCodeIgnoreCase(tags.getString("language"));
+            language = LanguageAlpha3Code.und;
+            if (JSONUtils.hasObject(tags, "language")) {
+                LanguageAlpha3Code.getByCodeIgnoreCase(tags.getString("language"));
+            }
+        } else {
+            LOGGER.warn("No language information available");
         }
 
         boolean isForced = false;
@@ -104,9 +120,9 @@ public class Prober implements Callable<ProbeResult> {
         }
         if (tags != null && JSONUtils.hasObject(tags, "language")) {
             audioStreamFactory.language(
-                    LanguageAlpha3Code.getByCodeIgnoreCase(tags.getString("language")));
+                    LanguageAlpha3Code.ace.getAlpha3B().getByCodeIgnoreCase(tags.getString("language")));
         } else {
-            audioStreamFactory.language(LanguageAlpha3Code.undefined);
+            audioStreamFactory.language(LanguageAlpha3Code.und);
         }
 
         if (JSONUtils.hasObject(currentObject, "bit_rate")) {

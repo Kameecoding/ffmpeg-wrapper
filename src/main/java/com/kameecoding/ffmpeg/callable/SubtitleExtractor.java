@@ -3,6 +3,7 @@ package com.kameecoding.ffmpeg.callable;
 import com.kameecoding.ffmpeg.FFmpeg;
 import com.kameecoding.ffmpeg.dto.SubtitleStream;
 import com.kameecoding.ffmpeg.enums.ResultType;
+import com.neovisionaries.i18n.LanguageAlpha3Code;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -68,8 +69,7 @@ public class SubtitleExtractor implements Callable<SubtitleExtractResult> {
             }
             StringBuilder output = new StringBuilder(basePath);
             output.append(FilenameUtils.getBaseName(input.getAbsolutePath()));
-            output.append(".");
-            output.append(stream.getLanguage().getAlpha3B());
+            output.append(".").append(stream.getLanguage().getAlpha3B());
             boolean forced = stream.isForced();
             if (forced) {
                 output.append(".forced");
