@@ -18,6 +18,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.json/json
     implementation "org.json:json:20170516"
     implementation "commons-io:commons-io:2.6"
+    implementation "org.apache.commons:commons-lang3:3.9"
 
     testCompile "junit:junit:4.12"
 }

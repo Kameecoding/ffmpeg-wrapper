@@ -8,6 +8,7 @@ import com.kameecoding.ffmpeg.dto.VideoStream;
 import com.kameecoding.ffmpeg.enums.FFProbeOptions;
 import com.kameecoding.ffmpeg.enums.ResultType;
 import com.neovisionaries.i18n.LanguageAlpha3Code;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -42,18 +43,18 @@ public class Prober implements Callable<ProbeResult> {
         try {
             array = jsonObject.getJSONArray("streams");
         } catch (Exception e) {
-            LOGGER.error("No streams found in file");
-            LOGGER.error(s);
+            LOGGER.error("No streams found in file", e);
             result.result= ResultType.FAILED;
+            result.errorMessage = ExceptionUtils.getMessage(e);
             return result;
         }
 
         try {
             result.videoStream = parseVideoStream(array);
         } catch (Exception e) {
-            result.errorMessages.add("No video stream found");
             LOGGER.error("No video stream found", e);
             result.result = FAILED;
+            result.errorMessage = "No video stream found";
         }
         JSONObject format = jsonObject.getJSONObject("format");
         String duration = format.getString("duration");

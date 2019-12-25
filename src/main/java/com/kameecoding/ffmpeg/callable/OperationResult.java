@@ -18,7 +18,7 @@ import java.util.List;
 
 public class OperationResult {
     protected ResultType result = ResultType.UNKNOWN;
-    protected List<String> errorMessages = new ArrayList<>();
+    protected String errorMessage;
 
     OperationResult() {}
 
@@ -30,7 +30,7 @@ public class OperationResult {
         return ResultType.SUCCESS == result;
     }
 
-    public List<String> getErrorMessages() {
-        return Collections.unmodifiableList(errorMessages);
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }
