@@ -33,8 +33,11 @@ public class FFmpeg implements Runnable {
         try {
             if (logfile != null) {
                 logfile.getParentFile().mkdirs();
-                processBuilder.redirectOutput(logfile);
-                processBuilder.redirectError(logfile);
+                if (!logfile.exists()) {
+                    logfile.createNewFile();
+                }
+                processBuilder.redirectOutput(ProcessBuilder.Redirect.appendTo(logfile));
+                processBuilder.redirectError(ProcessBuilder.Redirect.appendTo(logfile));
             } else {
                 processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
                 processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);

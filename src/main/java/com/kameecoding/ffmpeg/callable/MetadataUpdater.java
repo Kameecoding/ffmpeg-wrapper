@@ -53,7 +53,7 @@ public final class MetadataUpdater implements Callable<OperationResult> {
             FileUtils.forceDelete(input);
         } catch (IOException e) {
             result.result = ResultType.FAILED;
-            result.errorMessages.add("Failed to delete old file " + input.getAbsolutePath());
+            result.errorMessage = "Failed to delete old file " + input.getAbsolutePath();
             LOGGER.error("Failed to delete old file {}", input.getAbsolutePath());
         }
 
@@ -62,11 +62,11 @@ public final class MetadataUpdater implements Callable<OperationResult> {
                 FileUtils.moveFile(output, input);
             } catch (IOException e) {
                 result.result = ResultType.FAILED;
-                result.errorMessages.add(
+                result.errorMessage =
                         "Failed to move updated file "
                                 + input.getAbsolutePath()
                                 + " to "
-                                + output.getAbsolutePath());
+                                + output.getAbsolutePath();
                 LOGGER.error(
                         "Failed to move updated file {} to {}",
                         input.getAbsolutePath(),

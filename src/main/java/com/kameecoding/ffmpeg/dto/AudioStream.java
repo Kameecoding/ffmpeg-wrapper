@@ -1,5 +1,6 @@
 package com.kameecoding.ffmpeg.dto;
 
+import com.kameecoding.ffmpeg.enums.AudioCodec;
 import com.neovisionaries.i18n.LanguageAlpha3Code;
 
 public class AudioStream {

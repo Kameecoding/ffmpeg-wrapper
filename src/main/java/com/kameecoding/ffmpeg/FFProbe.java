@@ -40,7 +40,10 @@ public class FFProbe implements Runnable {
             LOGGER.trace("FFPRobe running");
             if (logfile != null) {
                 logfile.getParentFile().mkdirs();
-                processBuilder.redirectError(logfile);
+                if (!logfile.exists()) {
+                    logfile.createNewFile();
+                }
+                processBuilder.redirectError(Redirect.appendTo(logfile));
             } else {
                 processBuilder.redirectError(Redirect.INHERIT);
             }

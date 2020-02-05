@@ -1,7 +1,7 @@
 package com.kameecoding.ffmpeg.callable;
 
 import com.kameecoding.ffmpeg.FFProbe;
-import com.kameecoding.ffmpeg.dto.AudioCodec;
+import com.kameecoding.ffmpeg.enums.AudioCodec;
 import com.kameecoding.ffmpeg.dto.AudioStream;
 import com.kameecoding.ffmpeg.dto.SubtitleStream;
 import com.kameecoding.ffmpeg.dto.VideoStream;
@@ -52,14 +52,17 @@ public class Prober implements Callable<ProbeResult> {
         try {
             result.videoStream = parseVideoStream(array);
         } catch (Exception e) {
+            result.errorMessage = "No video stream found";
             LOGGER.error("No video stream found", e);
             result.result = FAILED;
             result.errorMessage = "No video stream found";
         }
         JSONObject format = jsonObject.getJSONObject("format");
-        String duration = format.getString("duration");
-        Double dDuration = Double.valueOf(duration);
-        result.duration = Duration.ofSeconds(dDuration.longValue());
+        if (JSONUtils.hasObject(format, "duration")) {
+            String duration = format.getString("duration");
+            Double dDuration = Double.valueOf(duration);
+            result.duration = Duration.ofSeconds(dDuration.longValue());
+        }
 
         for (int i = 0; i < array.length(); ++i) {
             JSONObject currentObject = array.getJSONObject(i);
@@ -96,10 +99,12 @@ public class Prober implements Callable<ProbeResult> {
 
             language = LanguageAlpha3Code.und;
             if (JSONUtils.hasObject(tags, "language")) {
-                LanguageAlpha3Code.getByCodeIgnoreCase(tags.getString("language"));
+                language = LanguageAlpha3Code.getByCodeIgnoreCase(tags.getString("language"));
             }
         } else {
             LOGGER.warn("No language information available");
+            result.result = FAILED;
+            return;
         }
 
         boolean isForced = false;
