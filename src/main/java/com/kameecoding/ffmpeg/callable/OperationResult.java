@@ -12,25 +12,26 @@ package com.kameecoding.ffmpeg.callable;
 
 import com.kameecoding.ffmpeg.enums.ResultType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class OperationResult {
     protected ResultType result = ResultType.UNKNOWN;
     protected String errorMessage;
+  protected Throwable cause;
 
     OperationResult() {}
 
     public ResultType getResult() {
-        return result;
+      return result;
     }
 
-    public boolean isSuccess() {
-        return ResultType.SUCCESS == result;
-    }
+  public boolean isSuccess() {
+    return ResultType.SUCCESS == result;
+  }
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
+  public String getErrorMessage() {
+    return errorMessage;
+  }
+
+  public Throwable getCause() {
+    return cause;
+  }
 }

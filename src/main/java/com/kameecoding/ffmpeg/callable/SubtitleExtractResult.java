@@ -10,14 +10,15 @@
  */
 package com.kameecoding.ffmpeg.callable;
 
-import java.io.File;
+import java.nio.file.Path;
 
 public class SubtitleExtractResult extends OperationResult {
-    File output;
+  Path output;
 
-    SubtitleExtractResult() {}
+  SubtitleExtractResult() {
+  }
 
-    public File getOutput() {
-        return output;
-    }
+  public Path getOutput() {
+    return output;
+  }
 }
